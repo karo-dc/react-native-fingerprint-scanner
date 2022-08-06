@@ -1,6 +1,7 @@
 package com.hieuvp.fingerprint;
 
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
 import androidx.biometric.BiometricManager;
@@ -27,11 +28,10 @@ import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint.ExceptionLis
 import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint.IdentifyListener;
 
 
-@ReactModule(name="ReactNativeFingerprintScanner")
+@ReactModule(name = "ReactNativeFingerprintScanner")
 public class ReactNativeFingerprintScannerModule
         extends ReactContextBaseJavaModule
-        implements LifecycleEventListener
-{
+        implements LifecycleEventListener {
     public static final int MAX_AVAILABLE_TIMES = Integer.MAX_VALUE;
     public static final String TYPE_BIOMETRICS = "Biometrics";
     public static final String TYPE_FINGERPRINT_LEGACY = "Fingerprint";
@@ -106,9 +106,9 @@ public class ReactNativeFingerprintScannerModule
         AuthCallback authCallback = new AuthCallback(promise);
         Executor executor = Executors.newSingleThreadExecutor();
         biometricPrompt = new BiometricPrompt(
-            fragmentActivity,
-            executor,
-            authCallback
+                fragmentActivity,
+                executor,
+                authCallback
         );
 
         return biometricPrompt;
@@ -116,29 +116,30 @@ public class ReactNativeFingerprintScannerModule
 
     private void biometricAuthenticate(final String title, final String subtitle, final String description, final String cancelButton, final Promise promise) {
         UiThreadUtil.runOnUiThread(
-            new Runnable() {
-                @Override
-                public void run() {
-                    FragmentActivity fragmentActivity = (FragmentActivity) mReactContext.getCurrentActivity();
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        FragmentActivity fragmentActivity = (FragmentActivity) mReactContext.getCurrentActivity();
 
-                    if(fragmentActivity == null) return;
+                        if (fragmentActivity == null) return;
 
-                    BiometricPrompt bioPrompt = getBiometricPrompt(fragmentActivity, promise);
+                        BiometricPrompt bioPrompt = getBiometricPrompt(fragmentActivity, promise);
 
-                    PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                        .setDeviceCredentialAllowed(false)
-                        .setConfirmationRequired(false)
-                        .setNegativeButtonText(cancelButton)
-                        .setDescription(description)
-                        .setSubtitle(subtitle)
-                        .setTitle(title)
-                        .build();
+                        PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                                .setDeviceCredentialAllowed(false)
+                                .setConfirmationRequired(false)
+                                .setNegativeButtonText(cancelButton)
+                                .setDescription(description)
+                                .setSubtitle(subtitle)
+                                .setTitle(title)
+                                .build();
 
-                    bioPrompt.authenticate(promptInfo);
-                }
-            });
+                        bioPrompt.authenticate(promptInfo);
+                    }
+                });
 
     }
+
     // the below constants are consistent across BiometricPrompt and BiometricManager
     private String biometricPromptErrName(int errCode) {
         switch (errCode) {
@@ -196,8 +197,7 @@ public class ReactNativeFingerprintScannerModule
     public void authenticate(String title, String subtitle, String description, String cancelButton, final Promise promise) {
         if (requiresLegacyAuthentication()) {
             legacyAuthenticate(promise);
-        }
-        else {
+        } else {
             final String errorName = getSensorError();
             if (errorName != null) {
                 promise.reject(errorName, TYPE_BIOMETRICS);
@@ -255,12 +255,12 @@ public class ReactNativeFingerprintScannerModule
         mFingerprintIdentify = new FingerprintIdentify(mReactContext);
         mFingerprintIdentify.setSupportAndroidL(true);
         mFingerprintIdentify.setExceptionListener(
-            new ExceptionListener() {
-                @Override
-                public void onCatchException(Throwable exception) {
-                    mReactContext.removeLifecycleEventListener(ReactNativeFingerprintScannerModule.this);
+                new ExceptionListener() {
+                    @Override
+                    public void onCatchException(Throwable exception) {
+                        mReactContext.removeLifecycleEventListener(ReactNativeFingerprintScannerModule.this);
+                    }
                 }
-            }
         );
         mFingerprintIdentify.init();
         return mFingerprintIdentify;
@@ -308,7 +308,7 @@ public class ReactNativeFingerprintScannerModule
 
             @Override
             public void onFailed(boolean isDeviceLocked) {
-                if(isDeviceLocked){
+                if (isDeviceLocked) {
                     promise.reject("AuthenticationFailed", "DeviceLocked");
                 } else {
                     promise.reject("AuthenticationFailed", TYPE_FINGERPRINT_LEGACY);

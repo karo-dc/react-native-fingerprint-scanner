@@ -9,11 +9,11 @@ buildscript {
     if (project == rootProject) {
         repositories {
             google()
-            jcenter()
+            mavenCentral()
         }
 
         dependencies {
-            classpath("com.android.tools.build:gradle:3.5.1")
+            classpath("com.android.tools.build:gradle:4.2.2")
         }
     }
 }
@@ -22,10 +22,10 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 29)
-    buildToolsVersion safeExtGet('buildToolsVersion', '29.0.2')
+    buildToolsVersion safeExtGet('buildToolsVersion', '31.0.0')
 
     defaultConfig {
-        minSdkVersion safeExtGet('minSdkVersion', 16)
+        minSdkVersion safeExtGet('minSdkVersion', 23)
         targetSdkVersion safeExtGet('targetSdkVersion', 29)
         versionCode 1
         versionName "1.0"
@@ -37,13 +37,12 @@ android {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
-    implementation 'com.facebook.react:react-native:+'
+    implementation 'com.facebook.react:react-native:0.20.1'
     // androidx:biometric now supports fingerprint back to Android v23
-    implementation "androidx.biometric:biometric:1.0.1"
+    implementation "androidx.biometric:biometric:1.1.0"
 
     // retain fingerprintScanner lib for compat with Android v16-23 device-specific drivers (Samsung & MeiZu)
     // 1.2.3 is the minimum version compatible with androidx.
