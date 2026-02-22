@@ -126,7 +126,7 @@ public class ReactNativeFingerprintScannerModule
                         BiometricPrompt bioPrompt = getBiometricPrompt(fragmentActivity, promise);
 
                         PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                                .setDeviceCredentialAllowed(false)
+                                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.BIOMETRIC_WEAK)
                                 .setConfirmationRequired(false)
                                 .setNegativeButtonText(cancelButton)
                                 .setDescription(description)
@@ -177,7 +177,7 @@ public class ReactNativeFingerprintScannerModule
 
     private String getSensorError() {
         BiometricManager biometricManager = BiometricManager.from(mReactContext);
-        int authResult = biometricManager.canAuthenticate();
+        int authResult = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.BIOMETRIC_WEAK);
 
         if (authResult == BiometricManager.BIOMETRIC_SUCCESS) {
             return null;
